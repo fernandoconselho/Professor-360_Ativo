@@ -1,0 +1,564 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Registered system administrator record",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Administrator email address",
+          "maxLength": 254
+        },
+        "role": {
+          "type": "string",
+          "description": "Administrator role label",
+          "maxLength": 32
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation",
+          "maxLength": 64
+        }
+      },
+      "required": ["email", "role"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role and access authorization",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User ID matching Firebase Auth UID",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the user",
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "description": "Authorized immutable institutional email",
+          "maxLength": 254
+        },
+        "cpf": {
+          "type": "string",
+          "description": "CPF document formatted or numbers",
+          "maxLength": 20
+        },
+        "registration": {
+          "type": "string",
+          "description": "Docente registration SIAPE or RA",
+          "maxLength": 50
+        },
+        "role": {
+          "type": "string",
+          "description": "Access profile role",
+          "maxLength": 32
+        },
+        "authorized": {
+          "type": "boolean",
+          "description": "Whether the user is authorized to access the system"
+        },
+        "status": {
+          "type": "string",
+          "description": "Active or Inactive status",
+          "maxLength": 20
+        },
+        "department": {
+          "type": "string",
+          "description": "Academic department",
+          "maxLength": 120
+        },
+        "title": {
+          "type": "string",
+          "description": "Honorific title e.g. Dra. or Prof.",
+          "maxLength": 20
+        },
+        "titulation": {
+          "type": "string",
+          "description": "Academic title e.g. Doutorado",
+          "maxLength": 50
+        },
+        "bio": {
+          "type": "string",
+          "description": "Biography or resume synopsis",
+          "maxLength": 1000
+        },
+        "lattesUrl": {
+          "type": "string",
+          "description": "Lattes or academic profile URL",
+          "maxLength": 300
+        },
+        "formation": {
+          "type": "string",
+          "description": "Undergraduate or graduate area",
+          "maxLength": 200
+        },
+        "officeHours": {
+          "type": "string",
+          "description": "Office hours and room for student assistance",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number",
+          "maxLength": 30
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "name", "email", "role", "authorized"]
+    },
+    "Institution": {
+      "title": "Institution",
+      "description": "Educational institution unit settings and grade parameters",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Institution name",
+          "maxLength": 200
+        },
+        "cnpj": {
+          "type": "string",
+          "description": "CNPJ registration",
+          "maxLength": 30
+        },
+        "address": {
+          "type": "string",
+          "description": "Full address",
+          "maxLength": 300
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone",
+          "maxLength": 30
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email",
+          "maxLength": 254
+        },
+        "director": {
+          "type": "string",
+          "description": "Director name",
+          "maxLength": 120
+        },
+        "minPassingGrade": {
+          "type": "number",
+          "description": "Minimum grade required to pass e.g. 6.0"
+        },
+        "minAttendancePercentage": {
+          "type": "number",
+          "description": "Minimum required attendance percent e.g. 75"
+        }
+      },
+      "required": ["id", "name", "minPassingGrade", "minAttendancePercentage"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Academic course curriculum",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique course ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID reference",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Course name",
+          "maxLength": 200
+        },
+        "code": {
+          "type": "string",
+          "description": "Course code",
+          "maxLength": 50
+        },
+        "modality": {
+          "type": "string",
+          "description": "Presencial, EAD, or Híbrido",
+          "maxLength": 30
+        },
+        "shift": {
+          "type": "string",
+          "description": "Shift time",
+          "maxLength": 30
+        },
+        "semesters": {
+          "type": "number",
+          "description": "Total semester duration"
+        }
+      },
+      "required": ["id", "name", "code"]
+    },
+    "ClassTurma": {
+      "title": "ClassTurma",
+      "description": "Class cohort / Turma",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Class ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Class name",
+          "maxLength": 100
+        },
+        "courseId": {
+          "type": "string",
+          "description": "Course ID",
+          "maxLength": 128
+        },
+        "courseName": {
+          "type": "string",
+          "description": "Course name",
+          "maxLength": 200
+        },
+        "period": {
+          "type": "string",
+          "description": "School term / period",
+          "maxLength": 30
+        },
+        "shift": {
+          "type": "string",
+          "description": "Shift",
+          "maxLength": 30
+        }
+      },
+      "required": ["id", "name", "courseId"]
+    },
+    "CurricularUnit": {
+      "title": "CurricularUnit",
+      "description": "Discipline / Curricular Unit",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "UC ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "code": {
+          "type": "string",
+          "description": "UC code",
+          "maxLength": 50
+        },
+        "name": {
+          "type": "string",
+          "description": "Discipline title",
+          "maxLength": 200
+        },
+        "teacherId": {
+          "type": "string",
+          "description": "Teacher ID",
+          "maxLength": 128
+        },
+        "teacherName": {
+          "type": "string",
+          "description": "Teacher name",
+          "maxLength": 120
+        },
+        "courseId": {
+          "type": "string",
+          "description": "Course ID",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "description": "Class ID",
+          "maxLength": 128
+        },
+        "workloadHours": {
+          "type": "number",
+          "description": "Workload hours"
+        }
+      },
+      "required": ["id", "code", "name"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student record with registration and enrollment details",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Student unique ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Student complete name",
+          "maxLength": 120
+        },
+        "academicRegistration": {
+          "type": "string",
+          "description": "Academic registration RA",
+          "maxLength": 50
+        },
+        "cpf": {
+          "type": "string",
+          "description": "CPF",
+          "maxLength": 20
+        },
+        "birthDate": {
+          "type": "string",
+          "description": "Date of birth",
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "description": "Student email",
+          "maxLength": 254
+        },
+        "courseId": {
+          "type": "string",
+          "description": "Course ID",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "description": "Class ID",
+          "maxLength": 128
+        },
+        "status": {
+          "type": "string",
+          "description": "Academic status",
+          "maxLength": 30
+        }
+      },
+      "required": ["id", "fullName", "academicRegistration"]
+    },
+    "AVAActivity": {
+      "title": "AVAActivity",
+      "description": "Activity evaluation criterion in the AVA system",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Activity ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "period": {
+          "type": "string",
+          "description": "Period p1 or p2",
+          "maxLength": 10
+        },
+        "name": {
+          "type": "string",
+          "description": "Activity name",
+          "maxLength": 100
+        },
+        "weight": {
+          "type": "number",
+          "description": "Weight"
+        },
+        "maxScore": {
+          "type": "number",
+          "description": "Maximum possible score"
+        }
+      },
+      "required": ["id", "period", "name", "weight", "maxScore"]
+    },
+    "StudentAVAGrades": {
+      "title": "StudentAVAGrades",
+      "description": "Student grade records for a specific curricular unit",
+      "type": "object",
+      "properties": {
+        "studentId": {
+          "type": "string",
+          "description": "Student ID",
+          "maxLength": 128
+        },
+        "ucId": {
+          "type": "string",
+          "description": "Curricular Unit ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "recoveryGrade": {
+          "type": "number",
+          "description": "Recovery grade score if applicable"
+        }
+      },
+      "required": ["studentId", "ucId"]
+    },
+    "DailyAttendanceRecord": {
+      "title": "DailyAttendanceRecord",
+      "description": "Class attendance call and content taught",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Attendance record ID",
+          "maxLength": 128
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution ID",
+          "maxLength": 128
+        },
+        "ucId": {
+          "type": "string",
+          "description": "Curricular unit ID",
+          "maxLength": 128
+        },
+        "classId": {
+          "type": "string",
+          "description": "Class ID",
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "description": "Date YYYY-MM-DD",
+          "maxLength": 20
+        },
+        "lessonCount": {
+          "type": "number",
+          "description": "Number of lessons taught"
+        },
+        "contentTaught": {
+          "type": "string",
+          "description": "Summary of pedagogical content taught",
+          "maxLength": 1000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "ucId", "classId", "date", "lessonCount"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Audit trace of user action",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Log ID",
+          "maxLength": 128
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp ISO",
+          "maxLength": 64
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "description": "User Name",
+          "maxLength": 120
+        },
+        "userRole": {
+          "type": "string",
+          "description": "User Role",
+          "maxLength": 32
+        },
+        "action": {
+          "type": "string",
+          "description": "Action performed",
+          "maxLength": 120
+        },
+        "details": {
+          "type": "string",
+          "description": "Action details",
+          "maxLength": 1000
+        }
+      },
+      "required": ["id", "timestamp", "userId", "action"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "System administrator accounts with elevated administrative rights"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile with role and authorization flags"
+    },
+    "/users/{userId}/institutions/{institutionId}": {
+      "schema": "Institution",
+      "description": "Private institutional configuration of the teacher"
+    },
+    "/users/{userId}/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Private courses managed by the teacher"
+    },
+    "/users/{userId}/classes/{classId}": {
+      "schema": "ClassTurma",
+      "description": "Private classes managed by the teacher"
+    },
+    "/users/{userId}/curricularUnits/{ucId}": {
+      "schema": "CurricularUnit",
+      "description": "Private curricular units and disciplines taught by the teacher"
+    },
+    "/users/{userId}/students/{studentId}": {
+      "schema": "Student",
+      "description": "Private student roster and academic records for the teacher"
+    },
+    "/users/{userId}/activities/{activityId}": {
+      "schema": "AVAActivity",
+      "description": "Private evaluation criteria configured by the teacher"
+    },
+    "/users/{userId}/grades/{gradeId}": {
+      "schema": "StudentAVAGrades",
+      "description": "Private student evaluation grades per curricular unit"
+    },
+    "/users/{userId}/attendance/{attendanceId}": {
+      "schema": "DailyAttendanceRecord",
+      "description": "Private daily attendance and pedagogical diary records"
+    },
+    "/users/{userId}/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Private audit trail of operations performed by the teacher"
+    }
+  }
+}

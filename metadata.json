@@ -1,0 +1,8 @@
+{
+  "name": "Remix Professor 360_implementação",
+  "description": "Sistema de gestão acadêmica voltado ao acompanhamento completo da vida estudantil, integrando controle de notas, avaliações no AVA, registro de presença e monitoramento de desempenho.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,135 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connectivity test document (Skill requirement)
+    match /test/connection {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'fernandoconselho@gmail.com' ||
+        request.auth.token.email == 'admin@avamais.edu.br' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Admin collection
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      
+      // Admin can create or user can create their own profile matching auth uid
+      allow create: if (isAdmin() && isValidId(userId)) || 
+        (isOwner(userId) && isValidId(userId) && incoming().id == userId);
+
+      // Email cannot be changed by user; role and authorization can only be modified by Admin
+      allow update: if (isAdmin() && isValidId(userId)) || (
+        isOwner(userId) && 
+        isValidId(userId) && 
+        incoming().id == userId &&
+        incoming().email == existing().email &&
+        !incoming().diff(existing()).affectedKeys().hasAny(['role', 'authorized', 'email'])
+      );
+
+      allow delete: if isAdmin();
+
+      // Subcollections strictly isolated to the authenticated teacher (userId)
+      match /institutions/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /courses/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /classes/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /curricularUnits/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /students/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /activities/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /grades/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /attendance/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /auditLogs/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /notifications/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /deletionReports/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+
+      match /settings/{id} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if (isOwner(userId) || isAdmin()) && isValidId(id);
+      }
+    }
+  }
+}
